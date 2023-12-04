@@ -10,7 +10,7 @@ function CommentsSection({ comments }) {
         <Grid item container key={comment?.id}>
           <Paper
             sx={{
-              width: "auto",
+              maxWidth: "70vw",
               height: "100%",
             }}
           >
@@ -19,20 +19,26 @@ function CommentsSection({ comments }) {
                 <Typography variant="h6">{comment.author}</Typography>
               </Grid>
 
-              <Grid justifyContent="space-between" item container>
-                <Grid item>
-                  <Typography sx={{ wordBreak: "break-word" }}>
-                    {comment.message}
-                  </Typography>
-                </Grid>
+              {/* <Grid
+                justifyContent="space-between"
+                alignItems="flex-end"
+                wrap="nowrap"
+                item
+                container
+              > */}
+              <Grid item xs={12}>
+                <Typography sx={{ wordBreak: "break-word" }}>
+                  {comment.message}
+                </Typography>
+              </Grid>
 
-                <Grid item>
-                  <Typography noWrap variant="caption" sx={{ color: "gray" }}>
-                    {moment(comment.date).format("DD/MM HH:mm")}
-                  </Typography>
-                </Grid>
+              <Grid item>
+                <Typography noWrap variant="caption" sx={{ color: "gray" }}>
+                  {moment(comment.date).format("DD/MM HH:mm")}
+                </Typography>
               </Grid>
             </Grid>
+            {/* </Grid> */}
           </Paper>
         </Grid>
       ))}

@@ -37,14 +37,9 @@ function CommentsContainer() {
   useEffect(() => {}, [author, message]);
 
   const { current: handleInput } = useRef((e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
 
-    const methodKeys = {
-      author: (a) => setAuthor(a),
-      message: (a) => setMessage(a),
-    };
-
-    methodKeys[name](value);
+    setMessage(value);
   });
 
   const handleSubmit = useCallback(async () => {
