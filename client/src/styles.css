@@ -1,0 +1,12 @@
+.primaryColor {
+  background-color: white;
+}
+
+.secondaryColor {
+  background-color: rgb(238, 238, 255);
+}
+
+.chatbox {
+  height: 700px;
+  overflow-y: scroll;
+}
