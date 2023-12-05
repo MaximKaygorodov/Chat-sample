@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import Cookies from "js-cookie";
 
 import { fetchPage, postComment } from "./api.js";
 
@@ -25,6 +26,17 @@ function CommentsContainer() {
   });
 
   useEffect(() => {
+    const savedAuthor = Cookies.get("author");
+    if (savedAuthor) {
+      setAuthor(savedAuthor);
+    } else {
+      const userAuthor = prompt("Please enter your nickname:");
+      if (userAuthor) {
+        Cookies.set("author", userAuthor);
+        setAuthor(userAuthor);
+      }
+    }
+
     fetchData.current();
   }, []);
 
@@ -44,7 +56,7 @@ function CommentsContainer() {
 
   const handleSubmit = useCallback(async () => {
     if (message.length) {
-      await postComment({ author: "Default", message });
+      await postComment({ author: author || "Default", message });
     } else {
       // add snackbar
     }

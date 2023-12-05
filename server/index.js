@@ -13,7 +13,7 @@ const corsOptions = {
 const PORT = process.env.PORT || 3001;
 
 app.use(cors(corsOptions));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.get("/getPage", (req, res) => {
   const rawComments = fs.readFileSync("./server/database/comments.json");

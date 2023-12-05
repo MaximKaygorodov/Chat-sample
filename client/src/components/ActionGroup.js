@@ -6,17 +6,19 @@ import SendIcon from "@mui/icons-material/Send";
 
 function ActionGroup({ onChange, onSubmit }) {
   return (
-    <Grid container spacing={1} my={1} alignItems="center">
-      <InputBase
-        sx={{ ml: 3, flex: 1 }}
-        onChange={onChange}
-        name="message"
-        placeholder="Write a message..."
-      />
-      <IconButton onClick={onSubmit} type="button">
-        <SendIcon />
-      </IconButton>
-    </Grid>
+    <form onSubmit={onSubmit} style={{ width: "100%" }}>
+      <Grid container spacing={1} my={1} alignItems="center">
+        <InputBase
+          sx={{ ml: 3, flex: 1 }}
+          onChange={onChange}
+          name="message"
+          placeholder="Write a message..."
+        />
+        <IconButton type="submit">
+          <SendIcon />
+        </IconButton>
+      </Grid>
+    </form>
   );
 }
 
