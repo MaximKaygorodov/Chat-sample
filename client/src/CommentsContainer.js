@@ -16,7 +16,6 @@ import "./styles.css";
 function CommentsContainer() {
   const [comments, setComments] = useState("");
   const [author, setAuthor] = useState("");
-  const [authorId, setAuthorId] = useState(null);
   const [message, setMessage] = useState("");
   const scrollableRef = useRef(null);
 
@@ -35,7 +34,6 @@ function CommentsContainer() {
       if (userAuthor) {
         Cookies.set("author", userAuthor);
         setAuthor(userAuthor);
-        setAuthorId(Cookies.get("authorId"));
       }
     }
 
