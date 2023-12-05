@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 import Cookies from "js-cookie";
 
 import { fetchPage, postComment } from "./api.js";
@@ -20,23 +21,36 @@ function CommentsContainer() {
   const scrollableRef = useRef(null);
 
   const fetchData = useRef(async () => {
-    const page = await fetchPage();
+    try {
+      const page = await fetchPage();
 
-    setComments(page.data);
+      setComments(page.data);
+    } catch (e) {
+      enqueueSnackbar("Server is not avaliable", { variant: "error" });
+      console.log(e);
+    }
+  });
+
+  const getCookieAuthor = useRef(() => {
+    try {
+      const savedAuthor = Cookies.get("author");
+      if (savedAuthor) {
+        setAuthor(savedAuthor);
+      } else {
+        const userAuthor = prompt("Please enter your nickname:");
+        if (userAuthor) {
+          Cookies.set("author", userAuthor);
+          setAuthor(userAuthor);
+        }
+      }
+    } catch (e) {
+      enqueueSnackbar("Couldn't find nickname", { variant: "error" });
+      console.log(e);
+    }
   });
 
   useEffect(() => {
-    const savedAuthor = Cookies.get("author");
-    if (savedAuthor) {
-      setAuthor(savedAuthor);
-    } else {
-      const userAuthor = prompt("Please enter your nickname:");
-      if (userAuthor) {
-        Cookies.set("author", userAuthor);
-        setAuthor(userAuthor);
-      }
-    }
-
+    getCookieAuthor.current();
     fetchData.current();
   }, []);
 
@@ -56,22 +70,31 @@ function CommentsContainer() {
 
   const handleSubmit = useCallback(
     async (e) => {
-      e.preventDefault();
-      if (message.length) {
-        await postComment({
-          author,
-          message,
-        });
-      } else {
-        // add snackbar
+      try {
+        e.preventDefault();
+        if (message.length) {
+          await postComment({
+            author,
+            message,
+          });
+          fetchData.current();
+        } else {
+          enqueueSnackbar("Please enter message", { variant: "warning" });
+        }
+      } catch (e) {
+        enqueueSnackbar("Couldn't save data", { variant: "error" });
+        console.log(e);
       }
-      fetchData.current();
     },
     [message, author]
   );
 
   return (
     <Container maxWidth="md">
+      <SnackbarProvider
+        preventDuplicate
+        style={{ font: "1rem 'Fira Sans', sans-serif" }}
+      />
       <Card>
         <CardContent className="chatbox secondaryColor" ref={scrollableRef}>
           {comments && <CommentsSection comments={comments} />}
