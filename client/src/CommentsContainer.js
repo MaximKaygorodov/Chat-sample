@@ -78,6 +78,7 @@ function CommentsContainer() {
             message,
           });
           fetchData.current();
+          enqueueSnackbar("Message sent", { variant: "success" });
         } else {
           enqueueSnackbar("Please enter message", { variant: "warning" });
         }
