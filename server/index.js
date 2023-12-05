@@ -12,6 +12,29 @@ const corsOptions = {
 };
 const PORT = process.env.PORT || 3001;
 
+const updateDatabaseTable = async (table, data) => {
+  const rawData = await fs.readFileSync(`./server/database/${table}`);
+  const jsonData = JSON.parse(rawData);
+
+  const id = jsonData.slice(-1)[0]?.id + 1 || 1;
+  console.log(jsonData.slice(-1)[0]);
+  jsonData.push({ ...data, id });
+  console.log(jsonData);
+
+  const jsonString = JSON.stringify(jsonData);
+  console.log(jsonString);
+
+  const res = await fs.writeFileSync(
+    `./server/database//${table}`,
+    jsonString,
+    "utf-8",
+    (err) => {
+      if (err) throw err;
+      console.log("Data added to file");
+    }
+  );
+};
+
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
@@ -23,26 +46,8 @@ app.get("/getPage", (req, res) => {
 
 app.post("/comment", async (req, res) => {
   try {
-    const { author, message } = req.body;
-    const comments = await fs.readFileSync("./server/database/comments.json");
-    const jsonData = JSON.parse(comments);
-
-    jsonData.push({
-      author,
-      message,
-    });
-
-    const jsonString = JSON.stringify(jsonData);
-
-    await fs.writeFileSync(
-      "./server/database/comments.json",
-      jsonString,
-      "utf-8",
-      (err) => {
-        if (err) throw err;
-        console.log("Data added to file");
-      }
-    );
+    const { author, message, isNewAuthor } = req.body;
+    await updateDatabaseTable("comments.json", { author, message });
     res.send({ success: true });
   } catch (e) {
     console.log("error", e);

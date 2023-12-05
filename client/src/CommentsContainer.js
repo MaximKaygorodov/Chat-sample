@@ -16,6 +16,7 @@ import "./styles.css";
 function CommentsContainer() {
   const [comments, setComments] = useState("");
   const [author, setAuthor] = useState("");
+  const [authorId, setAuthorId] = useState(null);
   const [message, setMessage] = useState("");
   const scrollableRef = useRef(null);
 
@@ -34,6 +35,7 @@ function CommentsContainer() {
       if (userAuthor) {
         Cookies.set("author", userAuthor);
         setAuthor(userAuthor);
+        setAuthorId(Cookies.get("authorId"));
       }
     }
 
@@ -54,14 +56,21 @@ function CommentsContainer() {
     setMessage(value);
   });
 
-  const handleSubmit = useCallback(async () => {
-    if (message.length) {
-      await postComment({ author: author || "Default", message });
-    } else {
-      // add snackbar
-    }
-    fetchData.current();
-  }, [message, author]);
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (message.length) {
+        await postComment({
+          author,
+          message,
+        });
+      } else {
+        // add snackbar
+      }
+      fetchData.current();
+    },
+    [message, author]
+  );
 
   return (
     <Container maxWidth="md">
