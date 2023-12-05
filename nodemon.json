@@ -1,5 +1,5 @@
 {
   "verbose": true,
 
-  "ignore": ["server/database/", "client/"]
+  "ignore": ["backendend/database/", "frontend/"]
 }

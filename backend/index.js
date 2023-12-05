@@ -13,7 +13,7 @@ const corsOptions = {
 const PORT = process.env.PORT || 3001;
 
 const updateDatabaseTable = async (table, data) => {
-  const rawData = await fs.readFileSync(`./server/database/${table}`);
+  const rawData = await fs.readFileSync(`./backendend/database/${table}`);
   const jsonData = JSON.parse(rawData);
 
   const id = jsonData.slice(-1)[0]?.id + 1 || 1;
@@ -25,7 +25,7 @@ const updateDatabaseTable = async (table, data) => {
   console.log(jsonString);
 
   const res = await fs.writeFileSync(
-    `./server/database//${table}`,
+    `./backendend/database//${table}`,
     jsonString,
     "utf-8",
     (err) => {
@@ -39,7 +39,7 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 app.get("/getPage", (req, res) => {
-  const rawComments = fs.readFileSync("./server/database/comments.json");
+  const rawComments = fs.readFileSync("./backendend/database/comments.json");
   const comments = JSON.parse(rawComments);
   res.json(comments);
 });
